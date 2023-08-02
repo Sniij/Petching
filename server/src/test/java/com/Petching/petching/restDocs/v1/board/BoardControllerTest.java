@@ -156,6 +156,8 @@ public class BoardControllerTest implements BoardControllerTestHelper {
 
         BoardDto.Detail detail = StubData.MockBoard.getSingleDetailResponseBody();
 
+
+
         User user = StubData.MockUser.getSingleResultUser();
 
         given(boardService.findBoardByMK(Mockito.anyLong())).willReturn(Board.builder().build());
