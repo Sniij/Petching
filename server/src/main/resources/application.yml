@@ -1,10 +1,122 @@
 spring:
+  profiles:
+    active: dev
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            authorization-grant-type: authorization_code
+            client-name: Google
+            scope:
+              - email
+              - profile
+          kakao:
+            authorization-grant-type: authorization_code
+            client-name: Kakao
+            scope:
+              - profile_nickname
+              - account_email
+              - profile_image
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+        pathmatch:
+          matching-strategy: ant_path_matcher
+
+cloud:
+  aws:
+    s3:
+      bucket: petching.net
+    region:
+      auto: false
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      use-default-aws-credentials-chain: true
+
+aws:
+  paramstore:
+    enabled: true
+    prefix: /spring-boot-aws/petching
+    defaultContext: ${spring.profiles.active}
+    profileSeparator: _
+
+server:
+  servlet:
+    encoding:
+      force-response: true
+
+---
+
+spring:
   config:
     import: "aws-parameterstore:"
+    activate:
+      on-profile: dev
   datasource:
-    url: ${AWS-RDS}
-    username: ${AWS-RDS-username}
-    password: ${AWS-RDS-password}
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+  servlet:
+    multipart:
+      max-file-size: 10MB
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId:
+            clientSecret:
+            redirect-uri:
+          kakao:
+            clientId:
+            clientSecret:
+            redirect-uri:
+
+jwt:
+  secretKey:
+  access:
+    expiration: 360000
+    header: Authorization
+  refresh:
+    expiration: 120960000
+    header: Authorization-refresh
+
+mail:
+  address:
+    admin:
+
+config:
+  domain :
+
+---
+
+spring:
+  config:
+    import: "aws-parameterstore:"
+    activate:
+      on-profile: local
+  datasource:
+    url:
+    username:
+    password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database: mysql
@@ -19,29 +131,38 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
-
-cloud:
-  aws:
-    s3:
-      bucket: petching.net
-    region:
-      auto: false
-      static: ap-northeast-2
-    stack:
-      auto: false
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            clientId:
+            clientSecret:
+            redirect-uri:
+          kakao:
+            clientId:
+            clientSecret:
+            redirect-uri:
 
 aws:
-  paramstore:
-    enabled: true
-    prefix: /spring-boot-aws
-    defaultContext: petching
-    profileSeparator: _
+  accessKeyId:
+  secretKey:
+
+jwt:
+  secretKey:
+  access:
+    expiration: 360000
+    header: Authorization
+  refresh:
+    expiration: 120960000
+    header: Authorization-refresh
 
 mail:
-  address: ${admin-address}
+  address:
+    admin:
 
 config:
-  domain : ${deploy-domain}
+  domain :
 
 logging:
   level:
@@ -50,18 +171,4 @@ logging:
       springframework:
         orm:
           jpa: DEBUG
-server:
-  servlet:
-    encoding:
-      force-response: true
-
-jwt:
-  secretKey: y4ses4eyersghsgheesghsh5eshe45esh45sh45e4she5sh4
-
-  access:
-    expiration: 360000
-    header: Authorization
-
-  refresh:
-    expiration: 120960000
-    header: Authorization-refresh
+---

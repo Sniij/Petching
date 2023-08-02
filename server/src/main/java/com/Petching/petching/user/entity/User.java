@@ -2,11 +2,15 @@ package com.Petching.petching.user.entity;
 
 import com.Petching.petching.audit.Auditable;
 import lombok.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Getter @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "USERS")
 public class User extends Auditable {
@@ -17,6 +21,7 @@ public class User extends Auditable {
     @Column(nullable = false, length = 15, unique = true)
     private String nickName;
 
+    @Column
     private String password;
 
     @Column(nullable = false, unique = true)
@@ -30,15 +35,15 @@ public class User extends Auditable {
 
     private String socialId;
 
-    private String refreshToken;
+    private String profileImgUrl;
 
-   /* public void passwordEncode (PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(this.password);
-    }*/
 
-    public void updateRefreshToken (String updateRefreshToke) {
-        this.refreshToken = updateRefreshToke;
-    }
+    @ElementCollection
+    private List<Long> likedBoardList = new ArrayList<>();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
+
 
     public void updateNickName (String nickName) {
         this.nickName = nickName;
@@ -51,5 +56,9 @@ public class User extends Auditable {
     }
     public void updateAddress (String address) {
         this.address = address;
+    }
+
+    public void addLikedBoard(Long boardId){
+        likedBoardList.add(boardId);
     }
 }

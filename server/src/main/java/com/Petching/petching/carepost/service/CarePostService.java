@@ -12,8 +12,8 @@ import com.Petching.petching.carepost.dto.CarePostDto;
 import com.Petching.petching.carepost.entity.CarePost;
 import com.Petching.petching.carepost.mapper.CarePostMapper;
 import com.Petching.petching.carepost.repository.CarePostRepository;
-import com.Petching.petching.exception.BusinessLogicException;
-import com.Petching.petching.exception.ExceptionCode;
+import com.Petching.petching.global.exception.BusinessLogicException;
+import com.Petching.petching.global.exception.ExceptionCode;
 import com.Petching.petching.user.entity.User;
 import com.Petching.petching.user.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -97,8 +97,8 @@ public class CarePostService {
                 .ifPresent(findPost::setTitle);
         Optional.ofNullable(patch.getContent())
                 .ifPresent(findPost::setContent);
-        Optional.ofNullable(patch.getImage())
-                .ifPresent(findPost::setImage);
+        Optional.ofNullable(patch.getImgUrls())
+                .ifPresent(findPost::setImgUrls);
         Optional.ofNullable(patch.getStartDate())
                 .ifPresent(findPost::setStartDate);
         Optional.ofNullable(patch.getEndDate())
