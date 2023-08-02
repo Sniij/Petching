@@ -114,6 +114,7 @@ public class BoardControllerTest implements BoardControllerTestHelper {
                 .build();
         board.setBoardId(1L);
 
+
         User user = StubData.MockUser.getSingleResultUser(1L);
 
         given(userService.findUser(Mockito.anyLong())).willReturn(user);
